@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // La versión sencilla es la principal. Si la persona eligió la experta, se recuerda al volver a abrir.
+      try {
+        if (/[?&]sencilla/.test(location.search)) { localStorage.setItem("phy-version", "sencilla"); history.replaceState(null, "", location.pathname + location.hash); }
+        else if (localStorage.getItem("phy-version") === "experto") location.replace("experto.html");
+      } catch (e) { /* sin almacenamiento */ }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phyllobytes · Versión sencilla</title>
+    <meta name="description" content="Mira cómo llueve en tu lugar de Centroamérica, explicado con palabras sencillas y gráficas fáciles de leer." />
+    <meta name="theme-color" content="#f6f4ef" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/png" href="assets/rana.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/atlas-tema.css?v=7.2" />
+    <link rel="stylesheet" href="css/phyllobytes.css?v=7.2" />
+    <link rel="stylesheet" href="css/unificado.css?v=7.2" />
+    <link rel="stylesheet" href="css/basico.css?v=7.2" />
+    <link rel="stylesheet" href="css/claro-atlas.css?v=7.2" />
+    <link rel="stylesheet" href="css/claro.css?v=7.2d" />
+    <script src="assets/plotly.min.js"></script>
+    <script src="js/tema-plotly.js?v=7.2b"></script>
+  </head>
+  <body class="pagina-basica">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <symbol id="i-inicio" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 10v9.5h13V10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6.5-5.8 6.5-11A6.5 6.5 0 0 0 5.5 10c0 5.2 6.5 11 6.5 11Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="i-datos" viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m5 7H3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-aprende" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Zm0 0V19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-metodo" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M7.5 15h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1" fill="currentColor"/><circle cx="12.5" cy="10.5" r="1" fill="currentColor"/><circle cx="16" cy="10.5" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-acceso" viewBox="0 0 24 24"><circle cx="12" cy="4.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 8.5 12 10l7.5-1.5M12 10v4.5m0 0-3 5.5m3-5.5 3 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-chev-izq" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6M19 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(-2 0)"/></symbol>
+      <symbol id="i-chev-der" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6M5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 0)"/></symbol>
+      <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-cambio" viewBox="0 0 24 24"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-gota" viewBox="0 0 24 24"><path d="M12 3.5c3.6 4.4 6 7.9 6 10.9a6 6 0 0 1-12 0c0-3 2.4-6.5 6-10.9Z" fill="currentColor"/></symbol>
+      <symbol id="i-satelite" viewBox="0 0 24 24"><path d="m9 9 6 6M7.5 4.5l3 3-3 3-3-3 3-3Zm9 9 3 3-3 3-3-3 3-3ZM10.5 10.5l3 3M15 4a5 5 0 0 1 5 5M15 7a2 2 0 0 1 2 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-compu" viewBox="0 0 24 24"><path d="M4 5h16v10H4zM9 19h6M12 15v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </svg>
+    <a class="saltar" href="#principal" data-i="nav.skip">Saltar al contenido</a>
+
+    <div class="envoltura">
+      <header class="superior" id="superior">
+        <div class="sup-izq">
+          <a class="marca-sup" href="#inicio" data-ia="aria-label:nav.home_aria"><img class="rana-mini" src="assets/rana.png" alt="" width="30" height="36" /><img class="wordmark-mini" src="assets/wordmark-oscuro.png" alt="Phyllobytes" height="22" /></a>
+        </div>
+        <nav class="pildoras" data-ia="aria-label:nav.sections">
+          <a href="#inicio" data-i="nav.home">Inicio</a>
+          <a href="#mapa-seccion" data-i="bs.nav.place">Mi lugar</a>
+          <a href="#resultados" data-i="bs.nav.results">Mi resultado</a>
+          <a href="#aprende" data-i="nav.learn">Aprende</a>
+          <a href="#metodo" data-i="nav.method">Método</a>
+        </nav>
+        <div class="sup-der">
+          <a class="cambio-version cambio-discreto" href="experto.html" data-version="experto" data-ia="title:ver.to_expert;aria-label:ver.to_expert"><svg class="ico" aria-hidden="true"><use href="#i-cambio"/></svg><span data-i="ver.expert_short">Versión experta</span></a>
+          <div class="idioma" role="group" data-ia="aria-label:lang.group" data-activo="es">
+            <span class="idioma-gota" aria-hidden="true"></span>
+            <button type="button" data-lang="es" lang="es" data-ia="aria-label:lang.es" aria-pressed="true">ES</button>
+            <button type="button" data-lang="en" lang="en" data-ia="aria-label:lang.en" aria-pressed="false">EN</button>
+          </div>
+          <button type="button" class="pill-btn" id="btn-acceso" aria-expanded="false" aria-controls="panel-acceso" data-ia="aria-label:nav.a11y;title:nav.a11y"><svg class="ico"><use href="#i-acceso"/></svg><span class="pill-txt" data-i="nav.a11y_short">Accesibilidad</span></button>
+          <button type="button" class="pill-btn pill-cian" id="abrir-asistente" data-ia="aria-label:nav.assistant;title:nav.assistant"><svg class="ico"><use href="#i-chat"/></svg><span class="pill-txt" data-i="nav.ask">Asistente</span></button>
+        </div>
+        <section class="panel-acceso" id="panel-acceso" hidden role="dialog" data-ia="aria-label:a11y.title"></section>
+      </header>
+
+      <div id="aviso-servidor" class="aviso" role="status" hidden data-i="bs.run.need_server">La página no está conectada a su programa. Abre INICIAR_ATLAS.py y vuelve a cargar la página.</div>
+
+      <main id="principal">
+        <!-- ============ INICIO ============ -->
+        <section class="portada bs-portada" id="inicio" aria-labelledby="titulo">
+          <div class="portada-texto">
+            <p class="sobretitulo" data-i="bs.hero.kicker">Versión sencilla</p>
+            <h1 id="titulo" data-i="bs.hero.h1">¿Cuánto y cómo llueve donde vives?</h1>
+            <p class="lead" data-i="bs.hero.lead">Elige tu lugar, toca un botón y mira la lluvia de los últimos años explicada con palabras sencillas.</p>
+            <div class="acciones">
+              <a class="btn btn-cian" href="#mapa-seccion" data-i="bs.hero.cta1">Empezar</a>
+              <a class="btn btn-fantasma" href="#aprende" data-i="bs.hero.cta2">¿Cómo funciona?</a>
+            </div>
+            <ol class="bs-tres">
+              <li><b>1</b><div><strong data-i="bs.hero.s1">Elige tu lugar</strong><span data-i="bs.hero.s1d">Toca tu país, una ciudad o el mapa.</span></div></li>
+              <li><b>2</b><div><strong data-i="bs.hero.s2">Toca «Ver la lluvia»</strong><span data-i="bs.hero.s2d">La página busca los datos por ti.</span></div></li>
+              <li><b>3</b><div><strong data-i="bs.hero.s3">Lee las gráficas</strong><span data-i="bs.hero.s3d">Cada una responde una pregunta.</span></div></li>
+            </ol>
+            <img class="ilustra-portada" src="assets/ilustraciones/7746152.png" alt="" aria-hidden="true" width="136" height="136" />
+          </div>
+          <div class="portada-visual panel"><div id="hero-mapa"></div><p class="sub portada-nota" data-i="bs.hero.note">Toca un país para elegir su capital.</p></div>
+        </section>
+
+        <!-- ============ MI LUGAR ============ -->
+        <section class="seccion" id="mapa-seccion" aria-labelledby="t-lugar">
+          <div class="seccion-cab"><p class="sobretitulo" data-i="bs.p1.kicker">Paso 1</p><h2 id="t-lugar" data-i="bs.p1.h">¿De qué lugar quieres saber?</h2><p data-i="bs.p1.p">Toca una capital, escribe el nombre de un lugar o toca directamente el mapa.</p></div>
+          <div class="bs-lugar">
+            <div class="panel bs-elegir">
+              <h3 data-i="bs.p1.caps">Capitales</h3>
+              <div class="bs-capitales" id="capitales"></div>
+              <h3 data-i="bs.p1.search">Buscar un lugar</h3>
+              <form class="bs-buscar" id="form-buscar">
+                <input id="buscar" list="lugares" autocomplete="off" data-ia="placeholder:bs.p1.search_ph;aria-label:bs.p1.search" placeholder="Ejemplo: Liberia, Cartago, Granada…" />
+                <datalist id="lugares"></datalist>
+                <button type="submit" class="btn btn-fantasma" data-i="bs.p1.search_btn">Buscar</button>
+              </form>
+              <p class="bs-elegido" id="elegido" role="status" aria-live="polite"><span data-i="bs.p1.none">Todavía no has elegido un lugar.</span></p>
+            </div>
+            <div class="panel bs-mapa-caja">
+              <div id="bs-mapa" class="bs-mapa"></div>
+              <p class="sub" data-i="bs.p1.mapnote">Toca el mapa para elegir cualquier punto de los 7 países.</p>
+            </div>
+          </div>
+
+          <div class="seccion-cab bs-sub"><p class="sobretitulo" data-i="bs.p2.kicker">Paso 2</p><h2 data-i="bs.p2.h">¿Cuántos años quieres mirar?</h2><p data-i="bs.p2.p">Más años muestran mejor si la lluvia está cambiando. Lo normal es mirar 20 años.</p></div>
+          <div class="panel bs-anios">
+            <div class="bs-opciones" role="radiogroup" data-ia="aria-label:bs.p2.h" id="periodos">
+              <button type="button" role="radio" data-anios="10" aria-checked="false"><strong data-i="bs.p2.10">10 años</strong><small class="rango"></small></button>
+              <button type="button" role="radio" data-anios="20" aria-checked="true"><strong data-i="bs.p2.20">20 años</strong><small class="rango"></small><em data-i="bs.p2.rec">recomendado</em></button>
+              <button type="button" role="radio" data-anios="todos" aria-checked="false"><strong data-i="bs.p2.all">Todos</strong><small class="rango"></small></button>
+            </div>
+            <details class="bs-mas">
+              <summary data-i="bs.opt.h">Más opciones (no es necesario cambiarlas)</summary>
+              <label class="full-label"><span data-i="bs.opt.src">¿De dónde vienen los datos?</span>
+                <select id="fuente">
+                  <option value="gpm" data-i="bs.opt.gpm">Satélite de la NASA (IMERG) · recomendado</option>
+                  <option value="chirps_auto" data-i="bs.opt.chirps">Satélite + estaciones (CHIRPS)</option>
+                  <option value="era5" data-i="bs.opt.era5">Modelo del clima europeo (ERA5)</option>
+                </select>
+              </label>
+              <p class="hint" data-i="bs.opt.years">Elegir los años a mano</p>
+              <div class="double"><label><span data-i="bs.opt.from">Desde</span> <input id="desde" type="number" min="1981" max="2030" /></label><label><span data-i="bs.opt.to">Hasta</span> <input id="hasta" type="number" min="1981" max="2030" /></label></div>
+            </details>
+          </div>
+
+          <div class="bs-correr">
+            <p class="sobretitulo" data-i="bs.p3.kicker">Paso 3</p>
+            <button type="button" class="main-btn bs-boton" id="ver"><span data-i="bs.run">Ver la lluvia de este lugar</span><span aria-hidden="true">→</span></button>
+            <div id="estado" class="status-card" hidden role="status" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <!-- ============ RESULTADO ============ -->
+        <section class="seccion" id="resultados" aria-labelledby="t-res">
+          <div class="seccion-cab"><p class="sobretitulo" data-i="bs.res.kicker">Tu resultado</p><h2 id="t-res"></h2><p id="res-sub"></p></div>
+          <p class="panel bs-vacio" id="res-vacio" data-i="bs.res.empty">Aquí aparecerá tu resultado cuando elijas un lugar y toques «Ver la lluvia».</p>
+          <div id="res" hidden>
+            <article class="panel bs-semaforo" id="semaforo"></article>
+            <div class="bs-cifras" id="cifras"></div>
+            <article class="panel bs-graf"><h3 data-i="bs.g1.q">¿Qué meses llueve más?</h3><p class="bs-lectura" id="g1-txt"></p><div class="bs-plot" id="g1"></div></article>
+            <article class="panel bs-graf"><h3 data-i="bs.g2.q">¿Cuántos días de lluvia fuerte hay cada año?</h3><p class="sub" data-i="bs.g2.sub">Días con más de 50 mm de lluvia (lluvia fuerte).</p><div class="bs-tendencia" id="g2-tr"></div><div class="bs-plot" id="g2"></div><p class="bs-lectura" id="g2-txt"></p></article>
+            <article class="panel bs-graf"><h3 data-i="bs.g3.q">¿Qué tan seguido cae una lluvia así?</h3><p class="sub" id="g3-sub"></p><ul class="bs-escala" id="g3"></ul></article>
+            <article class="panel bs-graf"><h3 data-i="bs.g4.q">¿Llueve más o menos que antes?</h3><div class="bs-tendencia" id="g4-tr"></div><div class="bs-plot" id="g4"></div><p class="bs-lectura" id="g4-txt"></p></article>
+            <aside class="consejo bs-nota"><b aria-hidden="true">i</b><div><strong data-i="bs.note.h">Para tener en cuenta</strong><p id="nota1"></p><p data-i="bs.note.2">Esto no es un pronóstico ni una alerta.</p></div></aside>
+            <div class="acciones bs-final">
+              <a class="btn btn-cian" href="#mapa-seccion" data-i="bs.more.other">Ver otro lugar</a>
+              <a class="btn btn-fantasma" href="experto.html" data-version="experto" data-i="bs.more.expert">Ver todos los detalles en la versión para expertos</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ APRENDE ============ -->
+        <section class="seccion" id="aprende" aria-labelledby="t-apr">
+          <div class="seccion-cab"><p class="sobretitulo" data-i="bs.apr.kicker">Sin palabras difíciles</p><h2 id="t-apr" data-i="bs.apr.h">Aprende cómo funciona</h2><p data-i="bs.apr.p">Todo lo que necesitas saber para leer tu resultado, en pocas palabras.</p></div>
+          <div id="aprende-contenido"></div>
+        </section>
+
+        <!-- ============ MÉTODO ============ -->
+        <section class="seccion" id="metodo" aria-labelledby="t-met">
+          <div class="seccion-cab"><h2 id="t-met" data-i="bs.met.h">Cómo lo calculamos</h2><p data-i="bs.met.p">Cuatro pasos sencillos. Cualquiera puede repetirlos.</p></div>
+          <ol class="pasos" id="pasos"></ol>
+          <div class="limites"><div class="panel"><h3 data-i="bs.met.si">Qué sí muestra</h3><ul id="lista-si"></ul></div><div class="panel"><h3 data-i="bs.met.no">Qué no muestra</h3><ul id="lista-no"></ul></div></div>
+        </section>
+      </main>
+
+      <footer class="pie">
+        <div class="pie-nubes" aria-hidden="true"></div>
+        <div class="pie-estado"><span class="estado-servidor" id="chip-servidor" role="status"><i aria-hidden="true"></i><span data-i="srv.check">Buscando servidor…</span></span> <span class="sub" data-i="pie.side">Hecho para entender la lluvia de Centroamérica.</span></div>
+        <div class="pie-texto">
+          <p id="pie-fuente"></p>
+          <p data-i="foot.tool">Herramienta educativa y de planificación. No es un pronóstico ni una alerta.</p>
+          <p class="foot"><span data-i="foot.sources">Fuentes oficiales:</span> <a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/" target="_blank" rel="noopener noreferrer">NASA POWER</a>, <a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener noreferrer">NASA GPM IMERG</a>, <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">ERA5 de Copernicus/ECMWF vía Open-Meteo (CC-BY 4.0)</a>, <a href="https://climateserv.servirglobal.net/" target="_blank" rel="noopener noreferrer">CHIRPS vía ClimateSERV</a>, <a href="https://www.spaceappschallenge.org/" target="_blank" rel="noopener noreferrer">NASA Space Apps</a>. <span data-i="at.foot.borders">Fronteras Natural Earth (dominio público); mapa base © OpenStreetMap. Para decisiones operativas contraste con los servicios meteorológicos oficiales de cada país.</span></p>
+        </div>
+        <img class="marca-agua marca-agua-pie" src="assets/marca-agua.png" alt="" aria-hidden="true" draggable="false" />
+      </footer>
+    </div>
+
+    <script src="js/00-base.js"></script>
+    <script src="data/asistente.json.js"></script>
+    <script src="js/i18n.js?v=7.2c"></script>
+    <script src="js/i18n-atlas.js?v=7.2"></script>
+    <script src="js/i18n-version.js?v=7.2"></script>
+    <script src="js/i18n-basico.js?v=7.2"></script>
+    <script src="js/traductor-nucleo.js?v=7.2"></script>
+    <script src="js/traductor-diccionario.js?v=7.2c"></script>
+    <script src="js/util.js"></script>
+    <script src="js/a11y.js"></script>
+    <script src="js/geo-ca.js?v=7.2"></script>
+    <script src="js/texto.js"></script>
+    <script src="js/asistente.js"></script>
+    <script src="js/pestanas.js?v=7.2c"></script>
+    <script src="js/basico.js?v=7.2"></script>
+  </body>
+</html>

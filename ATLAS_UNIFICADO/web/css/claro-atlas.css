@@ -1,0 +1,23 @@
+/* GENERADO por GENERAR_TEMA_CLARO.py: no editar a mano. Textos del atlas legibles en el tema claro. */
+:root:not([data-contraste="alto"]) .map-point-tooltip .pill { color: hsl(150, 55%, 30%); }
+:root:not([data-contraste="alto"]) .txt-catalog a { color: hsl(209, 57%, 30%); }
+:root:not([data-contraste="alto"]) .v-ok { color: hsl(96, 75%, 30%); }
+:root:not([data-contraste="alto"]) .v-warn { color: hsl(42, 75%, 30%); }
+:root:not([data-contraste="alto"]) .v-bad { color: hsl(4, 72%, 30%); }
+:root:not([data-contraste="alto"]) .cc-msgs li.warn { color: hsl(33, 75%, 30%); }
+:root:not([data-contraste="alto"]) .vchip.ok { color: hsl(96, 75%, 30%); }
+:root:not([data-contraste="alto"]) .vchip.warn { color: hsl(42, 75%, 30%); }
+:root:not([data-contraste="alto"]) .vchip.bad { color: hsl(4, 72%, 30%); }
+:root:not([data-contraste="alto"]) .ck-ok .ck-icon { color: hsl(95, 75%, 30%); }
+:root:not([data-contraste="alto"]) .ck-aviso .ck-icon { color: hsl(43, 75%, 30%); }
+:root:not([data-contraste="alto"]) .ck-no .ck-icon { color: hsl(4, 71%, 30%); }
+:root:not([data-contraste="alto"]) .ck-info .ck-icon { color: hsl(213, 68%, 30%); }
+:root:not([data-contraste="alto"]) #valTable td.good { color: hsl(213, 68%, 30%); }
+:root:not([data-contraste="alto"]) #valTable td.bad { color: hsl(15, 57%, 30%); }
+:root:not([data-contraste="alto"]) .tl-lamp.tl-red.on { color: hsl(3, 69%, 30%); }
+:root:not([data-contraste="alto"]) .tl-lamp.tl-yellow.on { color: hsl(45, 75%, 30%); }
+:root:not([data-contraste="alto"]) .tl-lamp.tl-green.on { color: hsl(139, 55%, 30%); }
+:root:not([data-contraste="alto"]) .pais-etiqueta span { color: hsl(191, 75%, 30%); }
+:root:not([data-contraste="alto"]) select option, :root:not([data-contraste="alto"]) select optgroup { color: hsl(180, 36%, 30%); }
+:root:not([data-contraste="alto"]) select optgroup { color: hsl(191, 75%, 30%); }
+:root:not([data-contraste="alto"]) select option:disabled { color: hsl(192, 9%, 30%); }

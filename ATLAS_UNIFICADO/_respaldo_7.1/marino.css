@@ -1,0 +1,64 @@
+/* Phyllobytes · tema «azul marino» (se carga al final en las tres páginas: portada, principiante y experto).
+ *
+ * Solo cambia la apariencia: fondo azul oscuro en lugar de negro verdoso, paneles sólidos en vez de
+ * vidrio con brillo, esquinas más sobrias y títulos con letra serif (aspecto más editorial y menos
+ * «generado»). No toca ningún identificador, control ni cálculo. El contraste alto sigue igual.
+ */
+:root {
+  --bg: #0c1a2e;
+  --bg-2: #10223b;
+  --panel: #12253f;
+  --panel-2: rgba(255, 255, 255, .05);
+  --borde: rgba(186, 208, 235, .16);
+  --borde-fuerte: rgba(200, 220, 245, .34);
+  --texto: #edf2f8;
+  --suave: rgba(222, 232, 245, .78);
+  --tinta: #071426;
+  --cian: #6cc8e8;
+  --cian-2: #8fd6ee;
+  --radio: .85rem;
+  --sombra: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 6px 18px rgba(2, 8, 20, .28);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --fondo-figura: #0f2038;
+}
+html, body { background: var(--bg); }
+
+/* Fondo plano con un degradado muy leve; sin manchas difuminadas */
+.fondo { background: linear-gradient(180deg, #0f2240 0%, var(--bg) 38%, #0a1628 100%); }
+.fondo .hoja { display: none; }
+
+/* Paneles sólidos, sin desenfoque ni brillo */
+.panel, .kpi, .superior, .lateral, .chat, .chat-fab, .panel-acceso {
+  background: var(--panel);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+.superior { background: rgba(12, 26, 46, .94); }
+.lateral { background: #0e1f36; }
+
+/* Títulos con serif: más cercano a una publicación hecha a mano */
+h1, h2, .portada h1, .seccion-cab h2, .analysis-head h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.005em; }
+h1 { letter-spacing: -.01em; }
+
+/* Botón principal sin halo de color */
+.main-btn { box-shadow: none; }
+
+/* Superficies que antes eran verde azulado */
+.map-space, .leaflet-container { background: #0f2038; }
+.map-guide, .map-note, .leaflet-control-attribution { background: rgba(10, 22, 40, .86) !important; }
+.leaflet-bar a, .leaflet-tooltip { background: #13284a; }
+.leaflet-bar a:hover { background: #1a3560; }
+select option, select optgroup { background-color: #13284a; color: #edf2f8; }
+select option:checked { background-color: #23446f; color: #fff; }
+
+/* Contraste alto: se respeta el negro absoluto */
+html[data-contraste="alto"], [data-contraste="alto"] body, [data-contraste="alto"] .superior, [data-contraste="alto"] .lateral { background: #000; }
+[data-contraste="alto"] .panel, [data-contraste="alto"] .kpi { background: #000; }
+[data-contraste="alto"] select option, [data-contraste="alto"] select optgroup { background-color: #000; color: #fff; }
+
+/* Botón para cambiar de versión (barra superior y lateral) */
+.cambio-version { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem .85rem; border-radius: 999px;
+  border: 1px solid var(--borde-fuerte); color: var(--texto); text-decoration: none; font: 600 .85rem var(--fuente); white-space: nowrap; }
+.cambio-version:hover { background: var(--panel-2); border-color: var(--cian); }
+.cambio-version .ico { width: 1.05rem; height: 1.05rem; }
+[data-contraste="alto"] .cambio-version { border: 2px solid #fff; }
+@media (max-width: 1240px) { .superior .cambio-version .pill-txt { display: none; } }
