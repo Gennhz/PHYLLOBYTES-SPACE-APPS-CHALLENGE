@@ -1,8 +1,6 @@
 # PHYLLOBYTES-SPACE-APPS-CHALLENGE
 
-# 🔵 PHYLLOBYTES.
-
-## Introduction
+# 🔵 Introduction
 
 Hello! We want to present **Phyllobytes**.
 
